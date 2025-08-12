@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ volunteer.name }}</h2>
+<p><strong>Phone:</strong> {{ volunteer.phone }}</p>
+<p><strong>Gender:</strong> {{ volunteer.get_gender_display }}</p>
+<p><strong>Created by:</strong>
+  {% if volunteer.created_by %}{{ volunteer.created_by.get_full_name|default:volunteer.created_by.username }}{% else %}-{% endif %}
+</p>
+
+<a class="btn btn-primary" href="{% url 'volunteer-edit' volunteer.id %}">Edit</a>
+<a class="btn btn-secondary" href="{% url 'volunteer-index' %}">Back</a>
+{% endblock %}

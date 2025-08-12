@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if messages %}
+    {% for m in messages %}
+      <div class="alert alert-{{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <h2>Edit Campaign: {{ campaign.name }}</h2>
+
+  <form method="post" class="mb-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-success" name="save_campaign">Save Campaign</button>
+  </form>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <h3>Link Section</h3>
+      <form method="post" class="mb-3">
+        {% csrf_token %}
+        {{ section_form.as_p }}
+        <button class="btn btn-primary" name="add_section">Add Section</button>
+      </form>
+      <ul class="list-group">
+        {% for cs in sections %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ cs.section.name }} (min: {{ cs.min_volunteers }}, max: {{ cs.max_volunteers }})
+          </li>
+        {% empty %}
+          <li class="list-group-item">No sections linked.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="col-md-6">
+      <h3>Add Volunteer</h3>
+      <form method="post" class="mb-3">
+        {% csrf_token %}
+        {{ volunteer_form.as_p }}
+        <button class="btn btn-primary" name="add_volunteer">Add Volunteer</button>
+      </form>
+      <ul class="list-group">
+        {% for cv in volunteers %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ cv.volunteer.name }} — {{ cv.volunteer.phone }}
+          </li>
+        {% empty %}
+          <li class="list-group-item">No volunteers yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <a class="btn btn-secondary mt-4" href="{% url 'campaign-index' %}">Back</a>
+{% endblock %}

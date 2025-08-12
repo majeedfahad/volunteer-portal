@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ campaign.name }}</h2>
+
+<p><strong>Dates:</strong> {{ campaign.campaign_start_date }} → {{ campaign.campaign_end_date }}</p>
+{% if campaign.exhibition_start_date %}
+<p><strong>Exhibition:</strong> {{ campaign.exhibition_start_date }} → {{ campaign.exhibition_end_date }}</p>
+{% endif %}
+
+<h3 class="mt-4">Sections</h3>
+<ul class="list-group mb-3">
+  {% for cs in campaign.campaign_sections.all %}
+  <li class="list-group-item">
+    {{ cs.section.name }} (min: {{ cs.min_volunteers }}, max: {{ cs.max_volunteers }})
+  </li>
+  {% empty %}
+  <li class="list-group-item">No sections linked.</li>
+  {% endfor %}
+</ul>
+
+<h3>Volunteers</h3>
+<ul class="list-group mb-3">
+  {% for cv in campaign.campaign_volunteers.all %}
+  <li class="list-group-item">{{ cv.volunteer.name }} — {{ cv.volunteer.phone }}</li>
+  {% empty %}
+  <li class="list-group-item">No volunteers yet.</li>
+  {% endfor %}
+</ul>
+
+<a class="btn btn-primary" href="{% url 'campaign-edit' campaign.id %}">Edit</a>
+<a class="btn btn-secondary" href="{% url 'campaign-index' %}">Back</a>
+{% endblock %}

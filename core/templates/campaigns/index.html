@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Campaigns</h2>
+<a class="btn btn-primary mb-3" href="{% url 'campaign-create' %}">Create Campaign</a>
+<table class="table table-bordered">
+  <thead><tr><th>Name</th><th>Dates</th></tr></thead>
+  <tbody>
+    {% for c in campaigns %}
+    <tr>
+      <td><a href="{% url 'campaign-show' c.id %}">{{ c.name }}</a></td>
+      <td>{{ c.campaign_start_date }} → {{ c.campaign_end_date }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="2">No campaigns.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
