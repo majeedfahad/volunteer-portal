@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}إضافة قسم{% endblock %}
+{% block top_title %}إضافة قسم{% endblock %}
+{% block content %}
+<h2>إضافة قسم</h2>
+<form method="post">{% csrf_token %}{{ form.as_p }}
+  <button class="btn btn-success" type="submit">حفظ</button>
+  <a class="btn btn-secondary" href="{% url 'department-index' %}">إلغاء</a>
+</form>
+{% endblock %}

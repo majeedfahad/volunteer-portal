@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Department: {{ department.name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="save_department" class="btn btn-success">Save</button>
+</form>
+
+<h3 class="mt-5">Sections</h3>
+<ul class="list-group">
+  {% for section in sections %}
+    <li class="list-group-item">{{ section.name }}</li>
+  {% empty %}
+    <li class="list-group-item">No sections yet.</li>
+  {% endfor %}
+</ul>
+
+<form method="post" class="mb-3">
+    {% csrf_token %}
+    {{ section_form.name.label_tag }} {{ section_form.name }}
+    <button type="submit" name="add_section" class="btn btn-primary mt-2">Add Section</button>
+</form>
+
+<a href="{% url 'department-index' %}" class="btn btn-secondary mt-3">Back</a>
+{% endblock %}

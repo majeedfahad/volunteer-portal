@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}الأقسام{% endblock %}
+{% block top_title %}الأقسام{% endblock %}
+{% block content %}
+<h2 class="mb-3">الأقسام</h2>
+<a href="{% url 'department-create' %}" class="btn btn-primary mb-3">إضافة قسم</a>
+<table class="table table-bordered">
+  <thead><tr><th>الاسم</th><th>المدير</th><th>أُنشيء في</th></tr></thead>
+  <tbody>
+    {% for dept in departments %}
+      <tr>
+        <td><a href="{% url 'department-show' dept.id %}">{{ dept.name }}</a></td>
+        <td>{% if dept.manager %}{{ dept.manager.get_full_name|default:dept.manager.username }}{% else %}–{% endif %}</td>
+        <td>{{ dept.created_at }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="3">لا توجد أقسام.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
