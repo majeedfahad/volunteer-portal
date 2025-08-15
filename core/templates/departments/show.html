@@ -1,26 +1,19 @@
 {% extends 'base.html' %}
-
+{% block title %}عرض القسم{% endblock %}
+{% block top_title %}عرض القسم{% endblock %}
 {% block content %}
-<h2>Department: {{ department.name }}</h2>
+<h2>القسم: {{ department.name }}</h2>
+<p><strong>المدير:</strong> {% if department.manager %}{{ department.manager.get_full_name|default:department.manager.username }}{% else %}–{% endif %}</p>
 
-<p><strong>Manager:</strong>
-    {% if department.manager %}
-      {{ department.manager }}
-    {% else %}
-      –
-    {% endif %}
-  </p>
-  
-
-<h3 class="mt-4">Sections</h3>
+<h3 class="mt-4">الأركان</h3>
 <ul class="list-group mb-4">
   {% for section in department.sections.all %}
     <li class="list-group-item">{{ section.name }}</li>
   {% empty %}
-    <li class="list-group-item">No sections yet.</li>
+    <li class="list-group-item">لا توجد أركان بعد.</li>
   {% endfor %}
 </ul>
 
-<a href="{% url 'department-edit' department.id %}" class="btn btn-primary">Edit</a>
-<a href="{% url 'department-index' %}" class="btn btn-secondary">Back</a>
+<a href="{% url 'department-edit' department.id %}" class="btn btn-primary">تعديل</a>
+<a href="{% url 'department-index' %}" class="btn btn-secondary">رجوع</a>
 {% endblock %}

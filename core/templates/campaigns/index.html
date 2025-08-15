@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Campaigns</h2>
-<a class="btn btn-primary mb-3" href="{% url 'campaign-create' %}">Create Campaign</a>
+<h2>الحملات</h2>
+<a class="btn btn-primary mb-3" href="{% url 'campaign-create' %}">أنشئ حملة</a>
 <table class="table table-bordered">
-  <thead><tr><th>Name</th><th>Dates</th></tr></thead>
+  <thead><tr><th>الاسم</th><th>التواريخ</th></tr></thead>
   <tbody>
     {% for c in campaigns %}
     <tr>
@@ -11,7 +11,7 @@
       <td>{{ c.campaign_start_date }} → {{ c.campaign_end_date }}</td>
     </tr>
     {% empty %}
-    <tr><td colspan="2">No campaigns.</td></tr>
+    <tr><td colspan="2">لا يوجد حملات.</td></tr>
     {% endfor %}
   </tbody>
 </table>

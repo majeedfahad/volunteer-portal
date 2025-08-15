@@ -9,6 +9,7 @@
 
   <h2>Edit Campaign: {{ campaign.name }}</h2>
 
+  <!-- نموذج حفظ بيانات الحملة -->
   <form method="post" class="mb-4">
     {% csrf_token %}
     {{ form.as_p }}
@@ -16,31 +17,72 @@
   </form>
 
   <div class="row g-4">
+    <!-- عمود الأركان -->
     <div class="col-md-6">
       <h3>Link Section</h3>
+      <!-- ربط ركن جديد بالحملة -->
       <form method="post" class="mb-3">
         {% csrf_token %}
         {{ section_form.as_p }}
         <button class="btn btn-primary" name="add_section">Add Section</button>
       </form>
-      <ul class="list-group">
-        {% for cs in sections %}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ cs.section.name }} (min: {{ cs.min_volunteers }}, max: {{ cs.max_volunteers }})
-          </li>
-        {% empty %}
-          <li class="list-group-item">No sections linked.</li>
-        {% endfor %}
-      </ul>
+
+      <!-- عرض كل الأركان المرتبطة + قائمة المعيّنين + فورم إسناد -->
+      {% for cs in sections %}
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title mb-2 d-flex align-items-center gap-2">
+              <span>{{ cs.section.name }}</span>
+              <small class="text-muted">({{ cs.current_count }} / {{ cs.max_volunteers }})</small>
+              {% if cs.current_count < cs.min_volunteers %}
+                <span class="badge text-bg-warning">Below min ({{ cs.min_volunteers }})</span>
+              {% endif %}
+              {% if cs.max_volunteers and cs.current_count >= cs.max_volunteers %}
+                <span class="badge text-bg-danger">Reached max</span>
+              {% endif %}
+            </h5>
+
+            <!-- قائمة المتطوعين المسندين لهذا الركن -->
+            <ul class="list-group mb-3">
+              {% for a in cs.assigned_list %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  {{ a.campaign_volunteer.volunteer.name }} — {{ a.campaign_volunteer.volunteer.phone }}
+                  <!-- (اختياري) زر إزالة الإسناد لاحقًا -->
+                </li>
+              {% empty %}
+                <li class="list-group-item">No volunteers assigned.</li>
+              {% endfor %}
+            </ul>
+
+            <!-- فورم إسناد متطوع جديد لهذا الركن -->
+            <form method="post" class="row g-2">
+              {% csrf_token %}
+              <div class="col">
+                {{ cs.assign_form.campaign_volunteer }}
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-outline-primary" name="add_assignment_{{ cs.id }}"
+                        {% if cs.max_volunteers and cs.current_count >= cs.max_volunteers %}disabled{% endif %}>
+                  Assign
+                </button>
+              </div>
+            </form>            
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-muted">No sections linked yet.</p>
+      {% endfor %}
     </div>
 
+    <!-- عمود متطوعي الحملة -->
     <div class="col-md-6">
-      <h3>Add Volunteer</h3>
+      <h3>Campaign Volunteers</h3>
       <form method="post" class="mb-3">
         {% csrf_token %}
         {{ volunteer_form.as_p }}
         <button class="btn btn-primary" name="add_volunteer">Add Volunteer</button>
       </form>
+
       <ul class="list-group">
         {% for cv in volunteers %}
           <li class="list-group-item d-flex justify-content-between align-items-center">

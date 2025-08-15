@@ -1,33 +1,25 @@
 {% extends 'base.html' %}
+{% block title %}المتطوعون{% endblock %}
+{% block top_title %}المتطوعون{% endblock %}
 {% block content %}
-<h2>Volunteers</h2>
-
+<h2>المتطوعون</h2>
 <form method="get" class="row g-2 mb-3">
-  <div class="col-auto">
-    <input type="text" name="q" value="{{ q|default_if_none:'' }}" class="form-control" placeholder="Search by name or phone">
-  </div>
-  <div class="col-auto">
-    <button class="btn btn-outline-primary">Search</button>
-  </div>
-  <div class="col-auto ms-auto">
-    <a href="{% url 'volunteer-create' %}" class="btn btn-primary">Add Volunteer</a>
-  </div>
+  <div class="col-auto"><input type="text" name="q" value="{{ q|default_if_none:'' }}" class="form-control" placeholder="ابحث بالاسم أو الجوال"></div>
+  <div class="col-auto"><button class="btn btn-outline-primary">بحث</button></div>
+  <div class="col-auto ms-auto"><a href="{% url 'volunteer-create' %}" class="btn btn-primary">إضافة متطوع</a></div>
 </form>
-
 <table class="table table-bordered">
-  <thead>
-    <tr><th>Name</th><th>Phone</th><th>Gender</th><th>Created By</th></tr>
-  </thead>
+  <thead><tr><th>الاسم</th><th>الجوال</th><th>الجنس</th><th>أضيف بواسطة</th></tr></thead>
   <tbody>
     {% for v in volunteers %}
     <tr>
       <td><a href="{% url 'volunteer-show' v.id %}">{{ v.name }}</a></td>
       <td>{{ v.phone }}</td>
       <td>{{ v.get_gender_display }}</td>
-      <td>{% if v.created_by %}{{ v.created_by.get_full_name|default:v.created_by.username }}{% else %}-{% endif %}</td>
+      <td>{% if v.created_by %}{{ v.created_by.get_full_name|default:v.created_by.username }}{% else %}–{% endif %}</td>
     </tr>
     {% empty %}
-    <tr><td colspan="4">No volunteers found.</td></tr>
+    <tr><td colspan="4">لا يوجد متطوعون.</td></tr>
     {% endfor %}
   </tbody>
 </table>
